@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using SqlSugar;
+
 namespace SoEasyPlatform
 {
     public class InitTable
@@ -11,32 +11,39 @@ namespace SoEasyPlatform
         /// <summary>
         /// 默认实体ID
         /// </summary>
-        private int _entitytempId=0;
+        private int _entitytempId = 0;
+
         /// <summary>
         /// 默认业务模版
         /// </summary>
         private int _biztempId = 0;
+
         /// <summary>
         /// 默认Web模版
         /// </summary>
         private int _webtempId = 0;
+
         /// <summary>
         /// 默认文件dbcontext
         /// </summary>
         private int _dbcontext = 0;
+
         /// <summary>
         /// 默认文件 net5 lib
         /// </summary>
         private int _net5lib = 0;
+
         /// <summary>
         /// Web模版需要的文件
         /// </summary>
         private List<int> _WebFiles = new List<int>();
+
         /// <summary>
         /// 默认命名空间
         /// </summary>
         private string _defaultNamespace = "WebFirst";
-        public  void Start()
+
+        public void Start()
         {
             var db = Repository<Menu>.GetInstance();
 
@@ -76,7 +83,7 @@ namespace SoEasyPlatform
             db.CodeFirst.InitTables<CommonField>();
         }
 
-        private  void InitProject(SqlSugarClient db)
+        private void InitProject(SqlSugarClient db)
         {
             db.CodeFirst.InitTables<Project>();
             if (db.Queryable<Project>().Count() == 0)
@@ -94,38 +101,38 @@ namespace SoEasyPlatform
                     IsInit = true,
                     ModelId = 1
                 }).ExecuteReturnIdentity();
-                var pid2= db.Insertable(new Project()
+                var pid2 = db.Insertable(new Project()
                 {
                     FileSuffix = ".cs",
                     NameFormat = "Services\\{0}Manager",
                     TemplateId1 = _biztempId + "",
-                    FileModel = "[{ \"name\":\""+_defaultNamespace+ ".Services\",\"nuget\":[{ \"name\":\"SqlSugarCore\",\"version\":\"5.0.4\" }]},{\"name\":\"Repository\", \"name_space\":\"" + _defaultNamespace+ ".Services\" }]",
-                    FileInfo = _net5lib + ","+_dbcontext,
+                    FileModel = "[{ \"name\":\"" + _defaultNamespace + ".Services\",\"nuget\":[{ \"name\":\"SqlSugarCore\",\"version\":\"5.0.4\" }]},{\"name\":\"Repository\", \"name_space\":\"" + _defaultNamespace + ".Services\" }]",
+                    FileInfo = _net5lib + "," + _dbcontext,
                     ProjentName = "[简单三层]_方案_业务_Sugar",
                     Path = @"c:\" + _defaultNamespace + @"\Services",
                     IsDeleted = false,
                     IsInit = true,
                     ModelId = 2,
-                    Reference=pid+""
+                    Reference = pid + ""
                 }).ExecuteReturnIdentity();
                 db.Insertable(new Project()
                 {
                     FileSuffix = ".cs",
                     TemplateId1 = _webtempId + "",
-                    FileModel = "[{ \"name\":\"命名空间\",\"nuget\":[{ \"name\":\"SqlSugarCore\",\"version\":\"5.0.4\" },{ \"name\":\"Microsoft.AspNetCore.Mvc.NewtonsoftJson\",\"version\":\"5.0.10\" },{ \"name\":\"Swashbuckle.AspNetCore\",\"version\":\"5.6.3\" }]},{\"name\":\"Startup\", \"name_space\":\"命名空间\" },{\"name\":\"Program\", \"name_space\":\"命名空间\" },{\"name\":\"appsettings\", \"name_space\":\"命名空间\"}]".Replace("命名空间",$"{_defaultNamespace}.Api"),
-                    FileInfo =string.Join(",",_WebFiles),
+                    FileModel = "[{ \"name\":\"命名空间\",\"nuget\":[{ \"name\":\"SqlSugarCore\",\"version\":\"5.0.4\" },{ \"name\":\"Microsoft.AspNetCore.Mvc.NewtonsoftJson\",\"version\":\"5.0.10\" },{ \"name\":\"Swashbuckle.AspNetCore\",\"version\":\"5.6.3\" }]},{\"name\":\"Startup\", \"name_space\":\"命名空间\" },{\"name\":\"Program\", \"name_space\":\"命名空间\" },{\"name\":\"appsettings\", \"name_space\":\"命名空间\"}]".Replace("命名空间", $"{_defaultNamespace}.Api"),
+                    FileInfo = string.Join(",", _WebFiles),
                     ProjentName = "[简单三层]_方案_前端_Sugar",
                     NameFormat = "Controllers\\{0}Controller",
                     Path = @"c:\" + _defaultNamespace + @"\Api",
                     IsDeleted = false,
                     IsInit = true,
                     ModelId = 3,
-                    Reference = pid + ","+pid2
+                    Reference = pid + "," + pid2
                 }).ExecuteReturnIdentity();
             }
         }
 
-        private  void InitCodeTable(SqlSugarClient db)
+        private void InitCodeTable(SqlSugarClient db)
         {
             db.CodeFirst.InitTables<CodeTable>();
             db.CodeFirst.InitTables<CodeType>();
@@ -147,49 +154,48 @@ namespace SoEasyPlatform
                                   Name="string10",
                                   CSharepType=CSharpDataType.@string.ToString(),
                                   DbType=new DbTypeInfo[]{
-                                                           new DbTypeInfo(){  Name="varchar",Length=10} 
+                                                           new DbTypeInfo(){  Name="varchar",Length=10}
                                 }
                     },
                     new CodeType{
                                   Name="ignore",
                                   CSharepType="建表忽略该类型字段，生成实体中@Model.IsIgnore 值为 true ",
                                   DbType=new DbTypeInfo[]{
-                                                  
                                 }
                     },
                     new CodeType{
                                   Name="string36",
                                   CSharepType=CSharpDataType.@string.ToString(),
                                   DbType=new DbTypeInfo[]{
-                                                           new DbTypeInfo(){  Name="varchar",Length=36} 
+                                                           new DbTypeInfo(){  Name="varchar",Length=36}
                                 }
                     },
                     new CodeType{
                                   Name="string100",
                                   CSharepType=CSharpDataType.@string.ToString(),
                                   DbType=new DbTypeInfo[]{
-                                                           new DbTypeInfo(){  Name="varchar",Length=100} 
+                                                           new DbTypeInfo(){  Name="varchar",Length=100}
                                 }
                     },
                     new CodeType{
                                   Name="string200",
                                   CSharepType=CSharpDataType.@string.ToString(),
                                   DbType=new DbTypeInfo[]{
-                                                           new DbTypeInfo(){  Name="varchar",Length=200} 
+                                                           new DbTypeInfo(){  Name="varchar",Length=200}
                                 }
                     },
                     new CodeType{
                                   Name="string500",
                                   CSharepType=CSharpDataType.@string.ToString(),
                                   DbType=new DbTypeInfo[]{
-                                                           new DbTypeInfo(){  Name="varchar",Length=500} 
+                                                           new DbTypeInfo(){  Name="varchar",Length=500}
                                 }
                     },
                     new CodeType{
                                   Name="string2000",
                                   CSharepType=CSharpDataType.@string.ToString(),
                                   DbType=new DbTypeInfo[]{
-                                                           new DbTypeInfo(){  Name="varchar",Length=2000} 
+                                                           new DbTypeInfo(){  Name="varchar",Length=2000}
                                 }
                     },
                     new CodeType{
@@ -263,15 +269,13 @@ namespace SoEasyPlatform
                                   DbType=new DbTypeInfo[]{
                                                            new DbTypeInfo(){  Name="datetime"},
                                                            new DbTypeInfo(){  Name="date"}
-                                                          
                                 }
                     },
-                    new CodeType{ 
+                    new CodeType{
                                  Name="timestamp",
                                  CSharepType="byte[]",
                                  DbType=new DbTypeInfo[]{
-                                                           new DbTypeInfo(){  Name="timestamp"} 
-
+                                                           new DbTypeInfo(){  Name="timestamp"}
                                 }
                     },
                     new CodeType{
@@ -327,7 +331,6 @@ namespace SoEasyPlatform
                                                            new DbTypeInfo(){  Name="int16"},
                                                            new DbTypeInfo(){  Name="smallint"},
                                                            new DbTypeInfo(){  Name="number",Length=5}
-
                                 }
                     },
                     new CodeType{
@@ -339,7 +342,6 @@ namespace SoEasyPlatform
                                                            new DbTypeInfo(){  Name="int64"},
                                                            new DbTypeInfo(){  Name="bigint"},
                                                            new DbTypeInfo(){  Name="number",Length=19}
-
                                 }
                     },
                     new CodeType{
@@ -349,7 +351,6 @@ namespace SoEasyPlatform
                                                            new DbTypeInfo(){  Name="blob"},
                                                            new DbTypeInfo(){  Name="longblob"},
                                                            new DbTypeInfo(){  Name="binary"}
-
                                 }
                     },
                     new CodeType{
@@ -357,7 +358,6 @@ namespace SoEasyPlatform
                                   CSharepType=CSharpDataType.DateTimeOffset.ToString(),
                                   DbType=new DbTypeInfo[]{
                                                            new DbTypeInfo(){  Name="datetimeoffset"}
-
                                 }
                     },
                     new CodeType{
@@ -366,12 +366,8 @@ namespace SoEasyPlatform
                                   DbType=new DbTypeInfo[]{
                                                            new DbTypeInfo(){  Name="json"},
                                                            new DbTypeInfo(){  Name="varchar", Length=3999}
-                                                           
-
                                 }
                     }
-
-
                 };
                 foreach (var item in list)
                 {
@@ -379,22 +375,22 @@ namespace SoEasyPlatform
                 }
                 db.Insertable(list).ExecuteCommand();
             }
-            if (!db.Queryable<CodeType>().Any(it => it.CSharepType == "DateTimeOffset")) 
+            if (!db.Queryable<CodeType>().Any(it => it.CSharepType == "DateTimeOffset"))
             {
                 db.Insertable(new CodeType()
                 {
-                     CSharepType= "DateTimeOffset",
-                     Name= "DateTimeOffset",
-                      DbType=new DbTypeInfo[] 
-                      { 
+                    CSharepType = "DateTimeOffset",
+                    Name = "DateTimeOffset",
+                    DbType = new DbTypeInfo[]
+                      {
                         new DbTypeInfo(){ Name="DateTimeOffset" },
                         new DbTypeInfo(){ Name="DateTime" }
-                      } 
+                      }
                 }).ExecuteCommand();
             }
             if (db.Queryable<CodeType>().Any(it => it.Name == "json_default"))
             {
-                db.Updateable<CodeType>().SetColumns(it => new CodeType() {  CSharepType = "object" }).Where(it => it.Name == "json_default").ExecuteCommand();
+                db.Updateable<CodeType>().SetColumns(it => new CodeType() { CSharepType = "object" }).Where(it => it.Name == "json_default").ExecuteCommand();
             }
             if (!db.Queryable<CodeType>().Any(it => it.Name == "string_char10"))
             {
@@ -402,10 +398,10 @@ namespace SoEasyPlatform
                 {
                     CSharepType = "string",
                     Name = "string_char10",
-                    Sort=10000,
+                    Sort = 10000,
                     DbType = new DbTypeInfo[]
                        {
-                        new DbTypeInfo(){ Name="char",Length=10  } 
+                        new DbTypeInfo(){ Name="char",Length=10  }
                        }
                 }).ExecuteCommand();
             }
@@ -424,12 +420,12 @@ namespace SoEasyPlatform
             }
         }
 
-        private  void InitConnection(SqlSugarClient db)
+        private void InitConnection(SqlSugarClient db)
         {
             db.CodeFirst.InitTables<Database>();
         }
 
-        private  void InitFileInfo(SqlSugarClient db)
+        private void InitFileInfo(SqlSugarClient db)
         {
             db.CodeFirst.InitTables<FileInfo>();
             if (db.Queryable<FileInfo>().Count() == 0)
@@ -482,7 +478,6 @@ namespace SoEasyPlatform
                 IsInit = true,
                 IsDeleted = false,
                 Suffix = "json"
-
             };
             var id = db.Insertable(d1).ExecuteReturnIdentity();
             _WebFiles.Add(id);
@@ -503,7 +498,6 @@ namespace SoEasyPlatform
                 IsInit = true,
                 IsDeleted = false,
                 Suffix = "cs"
-
             };
             var id = db.Insertable(d1).ExecuteReturnIdentity();
             _WebFiles.Add(id);
@@ -524,13 +518,12 @@ namespace SoEasyPlatform
                 IsInit = true,
                 IsDeleted = false,
                 Suffix = "cs"
-
             };
-            var id= db.Insertable(d1).ExecuteReturnIdentity();
+            var id = db.Insertable(d1).ExecuteReturnIdentity();
             _WebFiles.Add(id);
         }
 
-        private  void AddFile1(SqlSugarClient db)
+        private void AddFile1(SqlSugarClient db)
         {
             var temp = @"wwwroot\template\Lib1.txt";
             var temp2 = @"wwwroot\template\Lib1_1.txt";
@@ -545,11 +538,11 @@ namespace SoEasyPlatform
                 IsInit = true,
                 IsDeleted = false,
                 Suffix = "csproj"
-
             };
             db.Insertable(d1).ExecuteCommand();
         }
-        private  void AddFile2(SqlSugarClient db)
+
+        private void AddFile2(SqlSugarClient db)
         {
             var temp = @"wwwroot\template\Lib2.txt";
             var temp2 = @"wwwroot\template\Lib1_1.txt";
@@ -564,10 +557,10 @@ namespace SoEasyPlatform
                 Id = 1,
                 IsDeleted = false,
                 Suffix = "csproj"
-
             };
-            _net5lib= db.Insertable(d1).ExecuteReturnIdentity();
+            _net5lib = db.Insertable(d1).ExecuteReturnIdentity();
         }
+
         private void AddFile2_1(SqlSugarClient db)
         {
             var temp = @"wwwroot\template\WebLib.txt";
@@ -583,11 +576,11 @@ namespace SoEasyPlatform
                 Id = 1,
                 IsDeleted = false,
                 Suffix = "csproj"
-
             };
             var id = db.Insertable(d1).ExecuteReturnIdentity();
             _WebFiles.Add(id);
         }
+
         private void AddFile2_1_1(SqlSugarClient db)
         {
             var temp = @"wwwroot\template\WebLib.txt";
@@ -603,11 +596,11 @@ namespace SoEasyPlatform
                 Id = 1,
                 IsDeleted = false,
                 Suffix = "csproj"
-
             };
             var id = db.Insertable(d1).ExecuteReturnIdentity();
         }
-        private  void AddFile3(SqlSugarClient db)
+
+        private void AddFile3(SqlSugarClient db)
         {
             var temp = @"wwwroot\template\Lib2.txt";
             var temp2 = @"wwwroot\template\Lib1_1.txt";
@@ -622,11 +615,11 @@ namespace SoEasyPlatform
                 Id = 1,
                 IsDeleted = false,
                 Suffix = "csproj"
-
             };
             db.Insertable(d1).ExecuteCommand();
         }
-        private  void AddFile4(SqlSugarClient db)
+
+        private void AddFile4(SqlSugarClient db)
         {
             var temp = @"wwwroot\template\DbContext.txt";
             var temp2 = @"wwwroot\template\DbContext_1.txt";
@@ -641,12 +634,11 @@ namespace SoEasyPlatform
                 Id = 1,
                 IsDeleted = false,
                 Suffix = "cs"
-
             };
-            _dbcontext=db.Insertable(d1).ExecuteReturnIdentity();
+            _dbcontext = db.Insertable(d1).ExecuteReturnIdentity();
         }
 
-        private  void InitTemplate(SqlSugarClient db)
+        private void InitTemplate(SqlSugarClient db)
         {
             //db.DbMaintenance.DropTable("Template");
             db.CodeFirst.InitTables<Template, TemplateType>();
@@ -657,14 +649,13 @@ namespace SoEasyPlatform
                      new  TemplateType(){   Name="实体" },
                      new  TemplateType(){   Name="业务" },
                      new  TemplateType(){   Name="Web" }
-
                 }).ExecuteCommand();
             }
             if (db.Queryable<Template>().Count() == 0)
             {
                 var temp = @"wwwroot\template\Entity01.txt";
                 var directory = Directory.GetCurrentDirectory();
-                _entitytempId= db.Insertable(new Template()
+                _entitytempId = db.Insertable(new Template()
                 {
                     ChangeTime = DateTime.Now,
                     Content = FileSugar.FileToString(FileSugar.MergeUrl(directory, temp)),
@@ -672,13 +663,11 @@ namespace SoEasyPlatform
                     Sort = 0,
                     TemplateTypeId = 1,
                     Title = "[简单三层]_模版_实体_Sugar",
-                    IsInit=true
-
+                    IsInit = true
                 }).ExecuteReturnIdentity();
 
-
                 var temp2 = @"wwwroot\template\biz.txt";
-               _biztempId= db.Insertable(new Template()
+                _biztempId = db.Insertable(new Template()
                 {
                     ChangeTime = DateTime.Now,
                     Content = FileSugar.FileToString(FileSugar.MergeUrl(directory, temp2)),
@@ -686,10 +675,8 @@ namespace SoEasyPlatform
                     Sort = 0,
                     TemplateTypeId = 2,
                     Title = "[简单三层]_模版_业务_Sugar",
-                    IsInit=true
-
+                    IsInit = true
                 }).ExecuteReturnIdentity();
-
 
                 var temp3 = @"wwwroot\template\web.txt";
                 _webtempId = db.Insertable(new Template()
@@ -701,12 +688,11 @@ namespace SoEasyPlatform
                     TemplateTypeId = 3,
                     Title = "[简单三层]_模版_前端_Sugar",
                     IsInit = true
-
                 }).ExecuteReturnIdentity();
             }
         }
 
-        private  void InitMenu(SqlSugarClient db)
+        private void InitMenu(SqlSugarClient db)
         {
             if (db.DbMaintenance.IsAnyTable("Menu"))
             {
@@ -727,11 +713,8 @@ namespace SoEasyPlatform
                              new Menu{ MenuName="配置实体（视图建类模式）" , Url="/DbView"},
                              new Menu{ MenuName="配置业务",Url="/BIZ" },
                              new Menu{ MenuName="配置前端" ,Url="/Web"},
-                             new Menu{ MenuName="云方案 ×" , Url="/Solution"},
-                         
                         }
-                     }
-                    ,
+                     },
                      new Menu()
                      {
                         MenuName="自定义配置",
@@ -743,25 +726,9 @@ namespace SoEasyPlatform
                            new Menu{ MenuName="数据类型" , Url="/CodeType"},
                            new Menu{ MenuName="公共字段" , Url="/CommonFiled"},
                            new Menu{ MenuName="扩展属性",Url="/TagProperty" },
-                           new Menu{ MenuName="方案管理" , Url="/Project"} 
-
+                           new Menu{ MenuName="方案管理" , Url="/Project"}
                         }
-                     }
-                         ,
-                     new Menu()
-                     {
-                        MenuName="全部教程",
-                        Icon="fa fa-bar-chart-o",
-                        Child=new List<Menu>()
-                        {
-                             new Menu{ MenuName="WebFirst",Url="https://www.donet5.com/Doc/11?src=webfirst" },
-                             new Menu{ MenuName="SqlSugar ORM" ,Url="https://www.donet5.com/Home/Doc?src=webfirst" },
-                             new Menu{ MenuName="Sugar.IOC" ,Url="https://www.donet5.com/Doc/10/2250?src=webfirst" },
-                             new Menu{ MenuName="打赏作者" ,Url="https://www.donet5.com/Doc/28/2357?src=webfirst" },
-                             new Menu{ MenuName="商务合作" ,Url="https://www.donet5.com/Doc/28/2358?src=webfirst" },
-                        }
-                     }
-
+                     },
                 })
                 .AddSubList(it => it.Child.First().ParentId).ExecuteCommand();
         }

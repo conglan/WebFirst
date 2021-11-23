@@ -1,18 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using SqlSugar.IOC;
+using System;
+
 namespace SoEasyPlatform
 {
     /// <summary>
@@ -21,18 +13,22 @@ namespace SoEasyPlatform
     public class Startup
     {
         #region 配置参数
+
         /// <summary>
         /// 版本号
         /// </summary>
         public static string Version = "1.29";
+
         /// <summary>
         /// 接口域名目录
         /// </summary>
         /// <param name="configuration"></param>
-        public static string RootUrl = "/api/"; 
-        #endregion
+        public static string RootUrl = "/api/";
+
+        #endregion 配置参数
 
         #region 配置方法
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -41,6 +37,7 @@ namespace SoEasyPlatform
         {
             Configuration = configuration;
         }
+
         /// <summary>
         /// 配置对象
         /// </summary>
@@ -50,7 +47,7 @@ namespace SoEasyPlatform
         public void ConfigureServices(IServiceCollection services)
         {
             Services.AddServices(services);
-            services.AddSqlSugar(new SqlSugar.IOC.IocConfig()
+            services.AddSqlSugar(new IocConfig()
             {
                 ConfigId = "master1",
                 DbType = IocDbType.Sqlite,
@@ -72,14 +69,15 @@ namespace SoEasyPlatform
 #if DEBUG
             return AppContext.BaseDirectory;
 #endif
-            return System.Environment.CurrentDirectory;
+            return Environment.CurrentDirectory;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             Configures.AddConfigure(app, env);
-        } 
-#endregion
+        }
+
+        #endregion 配置方法
     }
 }

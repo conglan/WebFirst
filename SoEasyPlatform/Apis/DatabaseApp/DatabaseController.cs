@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
+using System;
+using System.Collections.Generic;
 
 namespace SoEasyPlatform.Apis
 {
@@ -15,9 +13,7 @@ namespace SoEasyPlatform.Apis
     {
         public DatabaseController(IMapper mapper) : base(mapper)
         {
-
         }
-
 
         /// <summary>
         /// 获取数据库列表
@@ -37,22 +33,19 @@ namespace SoEasyPlatform.Apis
             result.Data.Rows = base.mapper.Map<List<DatabaseGridViewModel>>(list);
             foreach (var item in result.Data.Rows)
             {
-
                 if (base.IsConnectionDb(mapper.Map<Database>(item)))
                 {
-
                     try
                     {
                         item.IsExist = true;
                         item.IsConnection = true;
                     }
-                    catch  
+                    catch
                     {
                         item.IsExist = false;
                         item.IsConnection = false;
                     }
                 }
-
             }
             result.Data.Total = count;
             result.Data.PageSize = model.PageSize;
@@ -79,7 +72,7 @@ namespace SoEasyPlatform.Apis
             {
                 saveObject.ChangeTime = DateTime.Now;
                 saveObject.IsDeleted = false;
-                dbid= databaseDb.InsertReturnIdentity(saveObject);
+                dbid = databaseDb.InsertReturnIdentity(saveObject);
                 result.IsSuccess = true;
                 result.Data = Pubconst.MESSAGEADDSUCCESS;
             }
